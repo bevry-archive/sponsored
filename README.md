@@ -41,15 +41,6 @@ Pull in sponsors across different services and correlate against your reward tie
 <li>Install: <code>npm install --save sponsored</code></li>
 <li>Module: <code>require('sponsored')</code></li></ul>
 
-<a href="http://browserify.org" title="Browserify lets you require('modules') in the browser by bundling up all of your dependencies"><h3>Browserify</h3></a><ul>
-<li>Install: <code>npm install --save sponsored</code></li>
-<li>Module: <code>require('sponsored')</code></li>
-<li>CDN URL: <code>//wzrd.in/bundle/sponsored@0.2.0</code></li></ul>
-
-<a href="http://enderjs.com" title="Ender is a full featured package manager for your browser"><h3>Ender</h3></a><ul>
-<li>Install: <code>ender add sponsored</code></li>
-<li>Module: <code>require('sponsored')</code></li></ul>
-
 <h3><a href="https://github.com/bevry/editions" title="Editions are the best way to produce and consume packages you care about.">Editions</a></h3>
 
 <p>This package is published with the following editions:</p>
@@ -96,7 +87,7 @@ See `./HISTORY.md` for progress, and `./SPEC.md` for details.
 
 These amazing people are maintaining this project:
 
-<ul><li><a href="https://github.com/balupton">Benjamin Lupton</a> — <a href="https://github.com/bevry/sponsored/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/sponsored">view contributions</a></li></ul>
+<ul><li><a href="http://balupton.com">Benjamin Lupton</a> — <a href="https://github.com/bevry/sponsored/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/sponsored">view contributions</a></li></ul>
 
 <h3>Sponsors</h3>
 
@@ -114,7 +105,7 @@ No sponsors yet! Will you be the first?
 
 These amazing people have contributed code to this project:
 
-<ul><li><a href="https://github.com/balupton">Benjamin Lupton</a> — <a href="https://github.com/bevry/sponsored/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/sponsored">view contributions</a></li></ul>
+<ul><li><a href="http://balupton.com">Benjamin Lupton</a> — <a href="https://github.com/bevry/sponsored/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/sponsored">view contributions</a></li></ul>
 
 <a href="https://github.com/bevry/sponsored/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
 
