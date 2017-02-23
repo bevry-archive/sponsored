@@ -56,9 +56,7 @@ Pull in sponsors across different services and correlate against your reward tie
 
 ## Usage
 
-This module is still under construction. Do not yet use. Check out the [issue tracker](https://github.com/bevry/sponsored/issues) if you want to help with development.
-
-[More info.](https://github.com/bevry/sponsored/issues/7)
+This module is still under construction. Do not yet use. Check out the [issue tracker](https://github.com/bevry/sponsored/issues) if you want to help with development. [Learn more.](https://github.com/bevry/sponsored/issues/7)
 
 
 <!-- HISTORY/ -->
