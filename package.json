@@ -105,6 +105,7 @@
     "extendr": "^3.2.2",
     "firebase": "^3.6.10",
     "firebase-admin": "^4.1.1",
+    "node-fetch": "^1.6.3",
     "patreon": "0.1.0"
   },
   "devDependencies": {

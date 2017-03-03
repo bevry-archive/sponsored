@@ -1,21 +1,23 @@
 'use strict'
 
 const eachr = require('eachr')
-const {md5, error, log, setter, updater, pusher, ensurer, fetcher} = require('../util')
+const appUtil = require('../util')
+const { error, log, clean } = appUtil
 
 module.exports = function (app) {
-	const set = setter(app.firebaseDatabase)
-	const update = updater(app.firebaseDatabase)
-	const push = pusher(app.firebaseDatabase)
-	const ensure = ensurer(app.firebaseDatabase)
-	const fetch = fetcher(app.firebaseDatabase)
+	const set = appUtil.set.bind(null, app.firebaseDatabase)
+	const update = appUtil.update.bind(null, app.firebaseDatabase)
+	const ensureUser = appUtil.ensureUser.bind(null, app.firebaseDatabase)
 
 	// fetch patreon data
 	return new Promise(function (resolve, reject) {
 		log('fetching patreon API data...')
 		require('patreon').default(app.config.patreon.creatorsAccessToken)('current_user/campaigns?include=rewards,creator,goals,pledges', function (err, data) {
-			if (err)  return reject(err)
+			if (err) return reject(err)
 			log('...fetched patreon API data')
+
+			// Start processing the items
+			log('processing the patreon items...')
 
 			// prepare the in memory database
 			const patreonDatabase = {}
@@ -23,23 +25,23 @@ module.exports = function (app) {
 			// add the items into the in memory database
 			const patreonItems = data.data.concat(data.included)
 			patreonItems.forEach(function (item) {
-				if ( patreonDatabase[item.type] == null )  patreonDatabase[item.type] = {}
-				patreonDatabase[item.type][item.id] = item
+				if (patreonDatabase[item.type] == null) patreonDatabase[item.type] = {}
+				patreonDatabase[item.type][item.id] = clean(item)
 				log(`item ${item.type}/${item.id} added`)
 			})
 
 			// verify relationships
 			eachr(patreonItems, function (item) {
-				if ( !item.relationships || item.relationships.length === 0 ) {
+				if (!item.relationships || item.relationships.length === 0) {
 					return
 				}
 				eachr(item.relationships, function (relationship) {
-					if ( !relationship.data || relationship.data.length === 0 ) {
+					if (!relationship.data || relationship.data.length === 0) {
 						return
 					}
 					const relations = Array.isArray(relationship.data) ? relationship.data : [relationship.data]
 					eachr(relations, function (relation) {
-						if ( relation && relation.type && patreonDatabase[relation.type] && relation.id && patreonDatabase[relation.type][relation.id] ) {
+						if (relation && relation.type && patreonDatabase[relation.type] && relation.id && patreonDatabase[relation.type][relation.id]) {
 							// relationship exists
 						}
 						else {
@@ -51,7 +53,7 @@ module.exports = function (app) {
 			})
 
 			// complete
-			log('fetched and processed patreon data')
+			log('...processed the patreon items')
 			resolve(patreonDatabase)
 		})
 
@@ -59,25 +61,27 @@ module.exports = function (app) {
 		// save it to the database
 		return Promise.resolve().then(function () {
 			const tasks = []
+			log('saving the patreon items...')
 			eachr(patreonDatabase, function (items, itemType) {
 				eachr(items, function (item, itemId) {
 					const p = update(`data/patreon/${itemType}/${itemId}`, item)
 					tasks.push(p)
 				})
 			})
-			return Promise.all(tasks)
+			return Promise.all(tasks).then(() => '...saved the patreon items')
 		})
 
-			// save the relations to the database
+			// push the patreon relations
 			.then(function () {
 				const tasks = []
+				log('relating the patreon items...')
 				eachr(patreonDatabase, function (items) {
 					eachr(items, function (item) {
-						if ( !item.relationships || item.relationships.length === 0 ) {
+						if (!item.relationships || item.relationships.length === 0) {
 							return
 						}
 						eachr(item.relationships, function (relationship) {
-							if ( !relationship.data || relationship.data.length === 0 ) {
+							if (!relationship.data || relationship.data.length === 0) {
 								return
 							}
 							const relations = Array.isArray(relationship.data) ? relationship.data : [relationship.data]
@@ -94,44 +98,20 @@ module.exports = function (app) {
 						})
 					})
 				})
-				return Promise.all(tasks)
+				return Promise.all(tasks).then(() => log('..related the patreon items'))
 			})
 
-			// update the user with any information
-			.then(function () {
-				const tasks = []
-				eachr(patreonDatabase.user, function (item) {
-					const user = {
-						name: item.attributes.full_name,
-						email: item.attributes.email
-					}
-					tasks.push(set(
-						`relation/email/${md5(user.email)}/patreon/${item.type}/${item.id}`,
-						true
-					))
-					tasks.push(
-						fetch(`relation/email/${md5(user.email)}/user`).then(function (val) {
-							const users = (val == null ? [] : Object.keys(val))
-							log('users:', val, users, users[0])
-							if ( users.length === 0 ) {
-								return push('data/user', user).then(function (userID) {
-									set(`relation/email/${md5(user.email)}/user/${userID}`, true)
-								})
-							}
-							else if ( users.length === 1 ) {
-								const userID = users[0]
-								return ensure(`data/user/${userID}`, user).then(function () {
-									set(`relation/email/${md5(user.email)}/user/${userID}`, true)
-								})
-							}
-							else {
-								return error(`more than one user was returned for relation/email/${md5(item.attributes.email)}`)
-							}
-						})
-					)
-				})
-				return Promise.all(tasks)
+			// push the users
+			.then(() => {
+				const users = Object.values(patreonDatabase.user)
+				log(`correlating the ${users.length} patreon users...`, users)
+				return Promise.all(users.map((user) => ensureUser({
+					name: user.attributes.full_name,
+					email: user.attributes.email || null,
+					twitter: user.attributes.twitter || null,
+					patreon: `patreon/${user.type}/${user.id}`
+				}))).then(() => log('...correlated the patreon users'))
 			})
 
-	}).then(app)
+	}).then(() => app)
 }

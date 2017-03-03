@@ -1,13 +1,14 @@
 /* eslint no-console:0 */
 'use strict'
 
-const {log, fetcher, updater} = require('../util')
+const appUtil = require('../util')
+const { log } = appUtil
 
 module.exports = function setupPatreon (app) {
-	const fetch = fetcher(app.firebaseDatabase)
-	const update = updater(app.firebaseDatabase)
+	const get = appUtil.get.bind(null, app.firebaseDatabase)
+	const update = appUtil.update.bind(null, app.firebaseDatabase)
 
-	return fetch('config/patreon')
+	return get('config/patreon')
 		.then(function (databasePatreonConfig) {
 			const mergedPatreonConfig = Object.assign({}, app.config.patreon, databasePatreonConfig)
 			log('merged fetched patreon config with environment config', mergedPatreonConfig)

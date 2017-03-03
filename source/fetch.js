@@ -31,6 +31,9 @@ module.exports = function app (config = {}) {
 				clientId: process.env.AUTH0_CLIENT_ID,
 				clientSecret: process.env.AUTH0_CLIENT_SECRET,
 				redirectURL: null // 'http://localhost:3000/login'
+			},
+			opencollective: {
+				collective: 'bevry'
 			}
 		}, config)
 	}
@@ -39,6 +42,7 @@ module.exports = function app (config = {}) {
 		.then(require('./app/firebase-setup'))
 		.then(require('./app/patreon-setup'))
 		.then(require('./app/patreon-data'))
-		.then((...args) => log('DONE', ...args))
+		.then(require('./app/opencollective-data'))
+		.then(() => log('DONE'))
 		.catch((...args) => log('FAILED', ...args))
 }
