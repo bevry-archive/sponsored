@@ -6,7 +6,7 @@ const { log, error, clean } = appUtil
 
 module.exports = function (app) {
 	const update = appUtil.update.bind(null, app.firebaseDatabase)
-	const ensureUser = appUtil.ensureUser.bind(null, app.firebaseDatabase)
+	const set = appUtil.set.bind(null, app.firebaseDatabase)
 	const url = `https://opencollective.com/${app.config.opencollective.collective}/members.json`
 	// fetch opencollective data
 	log('fetching open collective API data...')
@@ -23,22 +23,23 @@ module.exports = function (app) {
 			return users.map((user) => clean(user))
 		})
 		.then(function (users) {
-			log(`correlating the ${users.length} opencollective users...`)
-			return Promise.all(
-				users.map((user) => Promise.all([
-					// push to opencollective database
-					update(
-						`data/opencollective/users/${user.id}`,
-						user
-					),
-					// push to user database
-					ensureUser({
-						name: `${user.firstName} ${user.lastName}`,
-						twitter: user.twitterHandle || null,
-						opencollective: `opencollective/users/${user.id}`
-					})
-				]))
-			).then(() => log('...correlated the opencollective users'))
+			log(`relating the ${users.length} opencollective users...`)
+			const tasks = []
+			users.forEach(function (user) {
+				// save to opencollective database
+				tasks.push(update(
+					`data/opencollective/users/${user.id}`,
+					user
+				))
+				// save twitter relation
+				if (user.twitterHandle) {
+					tasks.push(set(
+						`relation/twitter/${user.twitterHandle}/opencollective/users/${user.id}`,
+						true
+					))
+				}
+			})
+			return Promise.all(tasks).then(() => log('...related the opencollective users'))
 		})
 		.then(() => app)
 }

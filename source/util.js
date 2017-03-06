@@ -29,25 +29,6 @@ function error (message, parentError) {
 	return error
 }
 
-// return object cleaned of empty values
-function clean (object) {
-	const newObject = {}
-	for (const key in object) {
-		if (object.hasOwnProperty(key)) {
-			let value = object[key]
-			const type = typeof value
-			if ( type === 'string') {
-				value = value.trim()
-			}
-			else if (type === 'object') {
-				value = clean(value)
-			}
-			newObject[key] = value
-		}
-	}
-	return newObject
-}
-
 // returns reference
 function ref (database, key) {
 	if (typeof key === 'string') {
@@ -204,4 +185,4 @@ function ensureUser (database, user) {
 		})
 }
 
-module.exports = { md5, inspect, log, error, clean, get, set, update, push, ensure, ensureUser }
+module.exports = { md5, inspect, log, error, get, set, update, push }

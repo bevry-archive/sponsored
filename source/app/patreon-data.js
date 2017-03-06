@@ -7,7 +7,6 @@ const { error, log, clean } = appUtil
 module.exports = function (app) {
 	const set = appUtil.set.bind(null, app.firebaseDatabase)
 	const update = appUtil.update.bind(null, app.firebaseDatabase)
-	const ensureUser = appUtil.ensureUser.bind(null, app.firebaseDatabase)
 
 	// fetch patreon data
 	return new Promise(function (resolve, reject) {
@@ -71,7 +70,7 @@ module.exports = function (app) {
 			return Promise.all(tasks).then(() => '...saved the patreon items')
 		})
 
-			// push the patreon relations
+			// save the patreon relations
 			.then(function () {
 				const tasks = []
 				log('relating the patreon items...')
@@ -101,16 +100,28 @@ module.exports = function (app) {
 				return Promise.all(tasks).then(() => log('..related the patreon items'))
 			})
 
-			// push the users
+			// save the user relations
 			.then(() => {
+				const tasks = []
 				const users = Object.values(patreonDatabase.user)
-				log(`correlating the ${users.length} patreon users...`, users)
-				return Promise.all(users.map((user) => ensureUser({
-					name: user.attributes.full_name,
-					email: user.attributes.email || null,
-					twitter: user.attributes.twitter || null,
-					patreon: `patreon/${user.type}/${user.id}`
-				}))).then(() => log('...correlated the patreon users'))
+				log(`relating the ${users.length} patreon users...`, users)
+				users.foreach(function (user) {
+					// save email relation
+					if (user.email) {
+						tasks.push(set(
+							`relation/email/${user.email}/opencollective/users/${user.id}`,
+							true
+						))
+					}
+					// save twitter relation
+					if (user.twitter) {
+						tasks.push(set(
+							`relation/twitter/${user.twitter}/opencollective/users/${user.id}`,
+							true
+						))
+					}
+				})
+				return Promise.all(tasks).then(() => log('...relating the patreon users'))
 			})
 
 	}).then(() => app)
