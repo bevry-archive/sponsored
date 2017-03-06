@@ -25,6 +25,7 @@ docs/
 
 # Editor Caches
 .c9/
+.vscode/
 
 # Private Files
 .env
