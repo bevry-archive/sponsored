@@ -68,7 +68,7 @@ Part 2:
 - [ ] provide an interface where sponsors can update their sponsor data
 
 Part 3:
-- [ ] add analyic tracker images to each sponsor render
+- [ ] add analytic tracker images to each sponsor render
 - [ ] build dashboard and service to render to the sponsors how much eyeballs they got, qualifying their investment
 
 Part 4:
