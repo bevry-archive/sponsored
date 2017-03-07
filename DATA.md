@@ -81,9 +81,40 @@
 
 ### Patreon
 
-Data is quite long. So just see firebase result.
+Provides accurate information on the current donation time and tier only.
+
+https://www.patreon.com/platform/documentation/api
+
+
+
+### Gratipay
+
+Provides accurate information on the current donation time and tier only.
+
+``` shell
+curl https://gratipay.com/~username/payment-instructions.json \
+    -u $userid:$api_key \
+    -X POST \
+    -d '[{"amount": "1.00", "team_slug": "foobar"}]' \
+    -H "Content-Type: application/json"
+```
+
+``` json
+[
+    {
+        "amount": "1.00",
+        "ctime": "2016-01-30T12:38:00.182230+00:00",
+        "due": "0.00",
+        "mtime": "2016-02-06T14:37:28.532508+00:00",
+        "team_name": "Foobar team",
+        "team_slug": "foobar"
+    }
+]
+```
 
 ### Open Collective
+
+Provides accurate information on the total donated. The current tier information is inaccurate, as users could be donating more than that tier, or once only, or once per year.
 
 https://opencollective.com/bevry/members.json
 
