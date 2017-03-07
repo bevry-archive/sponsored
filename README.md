@@ -92,25 +92,8 @@ This module is still under construction.
 
 [View development instructions.](https://github.com/bevry/sponsored/blob/master/CONTRIBUTING.md)
 
-[Find issues you can help with.](https://github.com/bevry/sponsored/issues))
+[Find issues you can help with.](https://github.com/bevry/sponsored/issues)
 
-
-<!-- HISTORY/ -->
-
-<h2>History</h2>
-
-<a href="https://github.com/bevry/sponsored/blob/master/HISTORY.md#files">Discover the release history by heading on over to the <code>HISTORY.md</code> file.</a>
-
-<!-- /HISTORY -->
-
-
-<!-- CONTRIBUTE/ -->
-
-<h2>Contribute</h2>
-
-<a href="https://github.com/bevry/sponsored/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
-
-<!-- /CONTRIBUTE -->
 
 
 <!-- BACKERS/ -->
