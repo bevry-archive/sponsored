@@ -28,13 +28,13 @@ module.exports = function (app) {
 			users.forEach(function (user) {
 				// save to opencollective database
 				tasks.push(update(
-					`data/opencollective/users/${user.id}`,
+					`data/opencollective/user/${user.id}`,
 					user
 				))
 				// save twitter relation
 				if (user.twitterHandle) {
 					tasks.push(set(
-						`relation/twitter/${user.twitterHandle}/opencollective/users/${user.id}`,
+						`relation/twitter/${user.twitterHandle}/opencollective/user/${user.id}`,
 						true
 					))
 				}

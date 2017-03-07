@@ -109,14 +109,14 @@ module.exports = function (app) {
 					// save email relation
 					if (user.email) {
 						tasks.push(set(
-							`relation/email/${user.email}/opencollective/users/${user.id}`,
+							`relation/email/${user.email}/opencollective/user/${user.id}`,
 							true
 						))
 					}
 					// save twitter relation
 					if (user.twitter) {
 						tasks.push(set(
-							`relation/twitter/${user.twitter}/opencollective/users/${user.id}`,
+							`relation/twitter/${user.twitter}/opencollective/user/${user.id}`,
 							true
 						))
 					}
