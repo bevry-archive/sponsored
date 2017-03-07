@@ -51,7 +51,7 @@ Currently Bevry receives funds through several sources - Stripe, PayPal, Coinbas
 
 Currently all the provided infrastructure only allows those to give funds to be treated as donators, who get nothing back, deincentivising large funding options through sponsorship - as all sponsorship rewards must be enacted manually, there is no automated service that rewards them.
 
-This project aims to solve that by making sponsorship effortless to receive and effortless to reward.
+This project aims to solve that by making it effortless to receive and reward sponsorship, incentivising and rewarding high-tier funding that covers development costs.
 
 
 ## Plan
