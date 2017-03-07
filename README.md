@@ -39,7 +39,7 @@ Pull in sponsors across different services and correlate against your reward tie
 
 The primary way we have funded our open-source development has been:
 
-1. Unsustainably using our unrelated consulting profits - unsustainable, as the business model is a misplaced loss leader, loss leaders only work if the project is a product
+1. Unsustainably using our related at the time then unrelated consulting profits - unsustainable, as the business model is a misplaced [loss leader](https://en.wikipedia.org/wiki/Loss_leader), loss leaders are a gamble that only work if the project has a sutainable business model
 2. Relying on donations from individuals, which are provided with no expectation of reward - reliable way to cover expenses through low tiers ($50/total/month over years)
 3. Relying on sponsorship from companies, which are provided with reimbursement through various reward schemes (usually exposure, however mechandise is another example) - sporadic way of funding development through high tiers ($2000/total/month over a few months then a large gap)
 
