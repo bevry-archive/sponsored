@@ -1,6 +1,6 @@
 # Specification
 
----
+## API
 
 The following is fairly new, consider it:
 
@@ -81,7 +81,9 @@ sponsorServer({
 Perhaps can use the npm package `joi` to some extent.
 
 
----
+
+
+# Old
 
 The following is fairly old, ignore it.
 

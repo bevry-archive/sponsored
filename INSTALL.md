@@ -22,6 +22,8 @@ https://www.patreon.com/platform/documentation/clients
 
 ## Auth0
 
+As account linking is a paid Auth0 feature, instead we will move to Firebase Authentication.
+
 ### Basic Setup
 
 https://manage.auth0.com/#/clients

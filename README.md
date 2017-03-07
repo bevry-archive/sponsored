@@ -33,30 +33,66 @@ Pull in sponsors across different services and correlate against your reward tie
 <!-- /DESCRIPTION -->
 
 
-<!-- INSTALL/ -->
+## Goals
 
-<h2>Install</h2>
+[Bevry](https://bevry.me) is an open-source community that is behind several popular open-source projects which get millions of downloads a month.
 
-<a href="https://npmjs.com" title="npm is a package manager for javascript"><h3>NPM</h3></a><ul>
-<li>Install: <code>npm install --save sponsored</code></li>
-<li>Module: <code>require('sponsored')</code></li></ul>
+The primary way we have funded our open-source development has been:
 
-<h3><a href="https://github.com/bevry/editions" title="Editions are the best way to produce and consume packages you care about.">Editions</a></h3>
+1. Unsustainably using our unrelated consulting profits - unsustainable, as the business model is a misplaced loss leader, loss leaders only work if the project is a product
+2. Relying on donations, which are provided with no expectation of reward - reliable way to cover expenses ($50/month over years)
+3. Relying on sponsorship, which are provided with the reimbursement through various reward schemes (usually exposure, however mechandise is another example) - sporadic way of funding development ($2000/month over a few months)
 
-<p>This package is published with the following editions:</p>
+Donations work off the intrinisic motivation of the donators ideology - socialism, altruisim, pay it forward, free culture, etc.
 
-<ul><li><code>sponsored</code> aliases <code>sponsored/index.js</code> which uses <a href="https://github.com/bevry/editions" title="Editions are the best way to produce and consume packages you care about.">Editions</a> to automatically select the correct edition for the consumers environment</li>
-<li><code>sponsored/source/index.js</code> is Source + <a href="https://babeljs.io/docs/learn-es2015/" title="ECMAScript Next">ESNext</a> + <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a></li>
-<li><code>sponsored/es2015/index.js</code> is <a href="https://babeljs.io" title="The compiler for writing next generation JavaScript">Babel</a> Compiled + <a href="http://babeljs.io/docs/plugins/preset-es2015/" title="ECMAScript 2015">ES2015</a> + <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a></li></ul>
+Sponsorships work off the extrinisic motivation of the sponsor to recoup their investment to ensure their business thrives - as altruistic spending is the end of a business.
 
-<p>Older environments may need <a href="https://babeljs.io/docs/usage/polyfill/" title="A polyfill that emulates missing ECMAScript environment features">Babel's Polyfill</a> or something similar.</p>
+Currently Bevry receives funds through several sources - Stripe, PayPal, Coinbase, Bank Transfer - as well as several services - Patreon, Open Collective, Gratipay.
 
-<!-- /INSTALL -->
+Currently all the provided infrastructure only allows those to give funds to be treated as donators, who get nothing back, deincentivising large funding options through sponsorship.
+
+This project aims to solve that.
+
+
+## Plan
+
+Part 1:
+- [x] pull in sponsor funding data from all different sources (stripe, paypal, bank transfer / manual input) and services (patreon, open collective, gratipay)
+- [ ] correlate sponsor information (their funding data plus collected sponsor details) with your reward tiers
+- [ ] expose data via api for rendering the sponsor data in your readmes and on your websites so they get a reward
+  - [ ] JSON API
+    - [ ] [projectz](https://github.com/bevry/projectz) integration (the thing that already renders the [backers listing](#backers) in this document)
+  - [ ] web component
+
+Part 2:
+- [ ] provide an interface where sponsors can update their sponsor data
+
+Part 3:
+- [ ] add analyic tracker images to each sponsor render
+- [ ] build dashboard and service to render to the sponsors how much eyeballs they got, qualifying their investment
+
+Part 4:
+- [ ] allow payments directly to sponsored, making us our own sponsor service (possible revenue option if wish to add fee - the lower the fee the better the competitive strategy)
+
+Part 5:
+- [ ] add merchandise and other type of reward fulfillments (definite revenue option) other type of reward fulfillments (definite revenue option)
 
 
 ## Usage
 
-This module is still under construction. Do not yet use. Check out the [issue tracker](https://github.com/bevry/sponsored/issues) if you want to help with development. [Learn more.](https://github.com/bevry/sponsored/issues/7)
+This module is still under construction.
+
+[Join the overview discussion.](https://github.com/bevry/sponsored/issues/7)
+
+[View install instructions.](https://github.com/bevry/sponsored/blob/master/INSTALL.md)
+
+[View API specficiation plans.](https://github.com/bevry/sponsored/blob/master/SPEC.md)
+
+[View DATA specification plans.](https://github.com/bevry/sponsored/blob/master/DATA.md)
+
+[View development instructions.](https://github.com/bevry/sponsored/blob/master/CONTRIBUTING.md)
+
+[Find issues you can help with.](https://github.com/bevry/sponsored/issues))
 
 
 <!-- HISTORY/ -->
