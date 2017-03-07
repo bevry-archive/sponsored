@@ -40,8 +40,8 @@ Pull in sponsors across different services and correlate against your reward tie
 The primary way we have funded our open-source development has been:
 
 1. Unsustainably using our unrelated consulting profits - unsustainable, as the business model is a misplaced loss leader, loss leaders only work if the project is a product
-2. Relying on donations, which are provided with no expectation of reward - reliable way to cover expenses ($50/month over years)
-3. Relying on sponsorship, which are provided with the reimbursement through various reward schemes (usually exposure, however mechandise is another example) - sporadic way of funding development ($2000/month over a few months)
+2. Relying on donations from individuals, which are provided with no expectation of reward - reliable way to cover expenses through low tiers ($50/total/month over years)
+3. Relying on sponsorship from companies, which are provided with reimbursement through various reward schemes (usually exposure, however mechandise is another example) - sporadic way of funding development through high tiers ($2000/total/month over a few months then a large gap)
 
 Donations work off the intrinisic motivation of the donators ideology - socialism, altruisim, pay it forward, free culture, etc.
 
@@ -49,9 +49,9 @@ Sponsorships work off the extrinisic motivation of the sponsor to recoup their i
 
 Currently Bevry receives funds through several sources - Stripe, PayPal, Coinbase, Bank Transfer - as well as several services - Patreon, Open Collective, Gratipay.
 
-Currently all the provided infrastructure only allows those to give funds to be treated as donators, who get nothing back, deincentivising large funding options through sponsorship.
+Currently all the provided infrastructure only allows those to give funds to be treated as donators, who get nothing back, deincentivising large funding options through sponsorship - as all sponsorship rewards must be enacted manually, there is no automated service that rewards them.
 
-This project aims to solve that.
+This project aims to solve that by making sponsorship effortless to receive and effortless to reward.
 
 
 ## Plan
