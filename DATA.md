@@ -24,30 +24,49 @@
         "[item.id]": "patreon api data"
       }
     },
-    // still planning
     "sponsored": {
-      "tiers": [500, 3000, 75000, 150000],  // still planning
       "user": {
         "[firebase push id]": {
-          "name": "user set",
-          "emails": "user set",
-          "patreonId": "user set",
-          "opencollectiveId": "user set",
-          // still planning
-          "patronage": {
-            // total amount given to date
-            "given": 3000,
-            // total amount cashed to date
-            "spent": 0,
-            // current month bill (highest tier from given-spent)
-            "active": 3000
-          },
-          // still planning
-          "sponsorDetails": {
-            "name": null,
-            "email": null,
-            "desription": null,
-            "logo": null
+          "emails": ["email@domain.com"],
+          "patreon": 123,
+          "opencollective": 123,
+          "gratipay": 123,
+          "credits": [
+            {
+              "source": "patreon",
+              "month": "2016-02",
+              "amount": 500,
+              "pledge": 123
+            },
+            {
+              "source": "opencollective",
+              "month": "2016-02",
+              "amount": 500
+            },
+            {
+              "source": "gratipay",
+              "date": "2016-02-08",
+              "amount": 500
+            },
+            {
+              "source": "manual",
+              "date": "2016-02-08",
+              "amount": 500
+            }
+          }
+          "debits": [
+            {
+              "source": "sponsored",
+              "month": "2017-03",
+              "amount": 3000
+            }
+          ],
+          "fields": {
+            "name": "Name",
+            "email": "email@domain.com",
+            "url": "https://domain.com",
+            "desription": "this is what the user has requested be displayed in their sponsor listing,
+            "logo": "https://domain.com/logo.png"
           }
         }
       }
