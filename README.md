@@ -88,7 +88,7 @@ This module is still under construction.
 
 [View API specficiation plans.](https://github.com/bevry/sponsored/blob/master/SPEC.md)
 
-[View DATA specification plans.](https://github.com/bevry/sponsored/blob/master/DATA.md)
+[View data specification plans.](https://github.com/bevry/sponsored/blob/master/DATA.md)
 
 [View development instructions.](https://github.com/bevry/sponsored/blob/master/CONTRIBUTING.md)
 
