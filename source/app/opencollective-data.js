@@ -2,7 +2,7 @@
 
 const request = require('node-fetch')
 const appUtil = require('../util')
-const { log, error, clean } = appUtil
+const { log, error } = appUtil
 
 module.exports = function (app) {
 	const update = appUtil.update.bind(null, app.firebaseDatabase)
@@ -20,7 +20,7 @@ module.exports = function (app) {
 				return error('the response from open collective was invalid')
 			}
 			log(`resulted in ${users.length} opencollective users`)
-			return users.map((user) => clean(user))
+			return users
 		})
 		.then(function (users) {
 			log(`relating the ${users.length} opencollective users...`)

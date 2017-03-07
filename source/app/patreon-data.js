@@ -2,16 +2,18 @@
 
 const eachr = require('eachr')
 const appUtil = require('../util')
-const { error, log, clean } = appUtil
+const patreon = require('patreon').default
+const { error, log, md5 } = appUtil
 
 module.exports = function (app) {
 	const set = appUtil.set.bind(null, app.firebaseDatabase)
 	const update = appUtil.update.bind(null, app.firebaseDatabase)
+	const patreonClient = patreon(app.config.patreon.creatorsAccessToken)
 
 	// fetch patreon data
 	return new Promise(function (resolve, reject) {
 		log('fetching patreon API data...')
-		require('patreon').default(app.config.patreon.creatorsAccessToken)('current_user/campaigns?include=rewards,creator,goals,pledges', function (err, data) {
+		patreonClient('current_user/campaigns?include=rewards,creator,goals,pledges', function (err, data) {
 			if (err) return reject(err)
 			log('...fetched patreon API data')
 
@@ -25,7 +27,7 @@ module.exports = function (app) {
 			const patreonItems = data.data.concat(data.included)
 			patreonItems.forEach(function (item) {
 				if (patreonDatabase[item.type] == null) patreonDatabase[item.type] = {}
-				patreonDatabase[item.type][item.id] = clean(item)
+				patreonDatabase[item.type][item.id] = item
 				log(`item ${item.type}/${item.id} added`)
 			})
 
@@ -105,18 +107,18 @@ module.exports = function (app) {
 				const tasks = []
 				const users = Object.values(patreonDatabase.user)
 				log(`relating the ${users.length} patreon users...`, users)
-				users.foreach(function (user) {
+				users.forEach(function (user) {
 					// save email relation
-					if (user.email) {
+					if (user.attributes.email) {
 						tasks.push(set(
-							`relation/email/${user.email}/opencollective/user/${user.id}`,
+							`relation/email/${md5(user.attributes.email.toLowerCase())}/patreon/user/${user.id}`,
 							true
 						))
 					}
 					// save twitter relation
-					if (user.twitter) {
+					if (user.attributes.twitter) {
 						tasks.push(set(
-							`relation/twitter/${user.twitter}/opencollective/user/${user.id}`,
+							`relation/twitter/${user.attributes.twitter.toLowerCase()}/patreon/user/${user.id}`,
 							true
 						))
 					}
