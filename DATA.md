@@ -107,6 +107,24 @@ https://www.patreon.com/platform/documentation/api
 ``` json
 [
    {
+      "type": "pledge",
+      "id": "<string>",
+      "attributes": {
+         "amount_cents": "<int>",
+         "created_at": "<date>",
+         "pledge_cap_cents": "<int>",
+         "patron_pays_fees": "<bool>"
+      },
+      "relationships": {
+         "patron": "...<user>...",
+         "reward": "...<reward>...",
+         "creator": "...<user>...",
+         "address": "...<address>...",
+         "card": "...<card>...",
+         "pledge_vat_location": "...<vat-location>..."
+      }
+   },
+   {
       "type": "user",
       "id": "<string>",
       "attributes": {
@@ -130,24 +148,6 @@ https://www.patreon.com/platform/documentation/api
       },
       "relationships": {
          "campaign": "...<campaign>..."
-      }
-   },
-   {
-      "type": "pledge",
-      "id": "<string>",
-      "attributes": {
-         "amount_cents": "<int>",
-         "created_at": "<date>",
-         "pledge_cap_cents": "<int>",
-         "patron_pays_fees": "<bool>"
-      },
-      "relationships": {
-         "patron": "...<user>...",
-         "reward": "...<reward>...",
-         "creator": "...<user>...",
-         "address": "...<address>...",
-         "card": "...<card>...",
-         "pledge_vat_location": "...<vat-location>..."
       }
    }
 ]
