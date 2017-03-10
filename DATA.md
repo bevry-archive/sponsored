@@ -100,6 +100,8 @@
 
 ### Patreon
 
+https://github.com/bevry/sponsored/issues/10
+
 Provides accurate information on the current donation time and tier only.
 
 1. Does changing the donation amount create a new pledge with a new created time?
@@ -161,6 +163,8 @@ https://www.patreon.com/platform/documentation/api
 
 ### Gratipay
 
+https://github.com/bevry/sponsored/issues/3
+
 Provides accurate information on the current donation time and tier only.
 
 ``` shell
@@ -186,9 +190,11 @@ curl https://gratipay.com/~username/payment-instructions.json \
 
 ### Open Collective
 
+https://github.com/bevry/sponsored/issues/2
+
 Provides accurate information on the total donated. The current tier information is inaccurate, as users could be donating more than that tier, or once only, or once per year.
 
-1. As it is, we can provide somewhat acurrate data by deducting our current totals and dates with the fetched totals and dates
+1. As it is, we can provide somewhat acurrate data by deducting our current totals and dates with the fetched totals and dates (`totalDonations`, `lastDonation`)
 2. Do past pledgers get provided?
 3. `https://opencollective.com/bevry/backers.json` and `https://opencollective.com/bevry/sponsors.json` return `[]`
 4. No data available to do cross-verification of users (verified email, is twitter verified?, oauth login, need something)
