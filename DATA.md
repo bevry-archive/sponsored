@@ -104,6 +104,54 @@ Provides accurate information on the current donation time and tier only.
 
 https://www.patreon.com/platform/documentation/api
 
+``` json
+[
+   {
+      "type": "user",
+      "id": "<string>",
+      "attributes": {
+         "first_name": "<string>",
+         "last_name": "<string>",
+         "full_name": "<string>",
+         "gender": "<int>",
+         "vanity": "<string>",
+         "about": "<string>",
+         "facebook_id": "<string>",
+         "image_url": "<string>",
+         "thumb_url": "<string>",
+         "youtube": "<string>",
+         "twitter": "<string>",
+         "facebook": "<string>",
+         "is_suspended": "<bool>",
+         "is_deleted": "<bool>",
+         "is_nuked": "<bool>",
+         "created": "<date>",
+         "url": "<string>"
+      },
+      "relationships": {
+         "campaign": "...<campaign>..."
+      }
+   },
+   {
+      "type": "pledge",
+      "id": "<string>",
+      "attributes": {
+         "amount_cents": "<int>",
+         "created_at": "<date>",
+         "pledge_cap_cents": "<int>",
+         "patron_pays_fees": "<bool>"
+      },
+      "relationships": {
+         "patron": "...<user>...",
+         "reward": "...<reward>...",
+         "creator": "...<user>...",
+         "address": "...<address>...",
+         "card": "...<card>...",
+         "pledge_vat_location": "...<vat-location>..."
+      }
+   }
+]
+```
 
 
 ### Gratipay
