@@ -65,7 +65,7 @@
             "name": "Name",
             "email": "email@domain.com",
             "url": "https://domain.com",
-            "desription": "this is what the user has requested be displayed in their sponsor listing,
+            "desription": "this is what the user has requested be displayed in their sponsor listing",
             "logo": "https://domain.com/logo.png"
           }
         }
