@@ -2,9 +2,9 @@
 'use strict'
 
 const extendr = require('extendr')
-const {log, error} = require('./util')
+const {log} = require('./util')
 
-module.exports = function app (config = {}) {
+module.exports = function (config = {}) {
 	const app = {
 		config: extendr.deep({
 			firebase: {

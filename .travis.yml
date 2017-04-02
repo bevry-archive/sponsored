@@ -1,62 +1,23 @@
-# 2016 November 5
-# https://github.com/bevry/base
-
-# Use the latest travis infrastructure
 sudo: false
-
-# https://github.com/nodejs/LTS
 language: node_js
 node_js:
-  - "0.8"   # end of life
-  - "0.10"  # end of life
-  - "0.12"  # maintenance
-  - "4"     # lts
-  - "6"     # lts
-  - "7"     # stable
+- '6'
+- '7'
 matrix:
   fast_finish: true
-  allow_failures:
-    - node_js: "0.8"
-    - node_js: "0.10"
 cache:
   directories:
-    - node_modules
-
-# Ensure npm is up to date
-# Ensure dependencies install with a LTS node version
-install: |
-  export CURRENT_NPM_VERSION="$(npm --version)"
-  export LATEST_NPM_VERSION="$(npm view npm version)"
-  if test "$CURRENT_NPM_VERSION" != "$LATEST_NPM_VERSION"; then
-    echo "running an old npm version, upgrading"
-    npm instal npm --global --cache-min=Infinity
-  fi
-
-  export CURRENT_NODE_VERSION="$(node --version)"
-  export LTS_NODE_VERSIONS="$(nvm ls-remote --lts)"
-  if echo "$LTS_NODE_VERSIONS" | grep "$CURRENT_NODE_VERSION"; then
-    echo "running on a LTS node version, completing setup"
-    npm run our:setup
-  else
-    echo "running on a non-LTS node version, completing setup on a LTS node version"
-    nvm install --lts
-    export LTS_NODE_VERSION="$(node --version)"
-    npm run our:setup
-    nvm use "$TRAVIS_NODE_VERSION"
-  fi
-
-# Ensure compilation and linting occur on an LTS node version
-before_script: |
-  if test "$LTS_NODE_VERSION"; then
-    echo "running on a non-LTS node version, compiling with LTS, skipping linting"
-    nvm use "$LTS_NODE_VERSION"
-    npm run our:compile
-    nvm use "$TRAVIS_NODE_VERSION"
-  else
-    echo "running on a LTS node version, compiling and linting"
-    npm run our:compile && npm run our:verify
-  fi
-
-# Custom notifications
-# travis encrypt --org "$SLACK_SUBDOMAIN:$SLACK_TRAVIS_TOKEN#updates" --add notifications.slack
-# travis encrypt --org "$TRAVIS_NOTIFICATION_EMAIL" --add notifications.email.recipients
+  - "$HOME/.npm"
+  - "$HOME/.yarn-cache"
+install:
+- eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-install.bash)"
+before_script:
+- eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-verify.bash)"
+after_success:
+- eval "$(curl -s https://raw.githubusercontent.com/balupton/awesome-travis/master/scripts/node-publish.bash)"
+notifications:
+  slack:
+    secure: IflXRd0dZiorl25oc2QRKuyy5yYC0RjekDARtwI0fMdxvXzCXV3eNkOWDzV5dtIU82IKelQnw1tsQ0TBHHyXCOsxLoQJ45Q4+GQyzPjbaVdSUfURWSCjQz/nSqQ9u18+AfXjvckhydUfKfdH9bPNHIWKjSaNwL7v29YOcetY0T+EfGLuhSH3Bz5CfvwGxG/qXg1+AxqesRiCjl6LxPqUHgUpqw8VCv01t5WCog/IbQItUpkq1XCH9tzG7Z6gIaaYeQU2SzRDY4XuLxmlnxppvjaURwgat0QkxXeYgTa3W64QkWgXLGzTZE+IQAguw9zEGZ73Hq77RtVm95E3NIZq1Ck+HzxHgEDVyRyuVcgpvBDg7a+OtYo9lMehT6eWjbVzc5XHfh2X7omj3SaWmoVoz6RpnjkxXEw2yz5R6JbmwLfwjoN7xxQU4Kia899g0WPHR3BBmEhNrj8Xgv6NmDdTNHXZPt1ARC8MuFbfyV3AFcEzbeD0kBycE8r5euUV6+83QgDKVNrPwa/giu7k+TnCAFubgOfM/PV+VzNNhl/AkRuBc32dJoryamXCFp0L8xrh7jG34jUUmxSOYtqXYVhoFJ2dvv2aSbR9xyFAgnyzLRLOHABh4BKUosquZeg/aCaqLQR52QutDYl22Zrh6315aqL3yBXnn0PVHTcEti1KFYk=
+  email:
+    recipients:
+      secure: Wik6BRMwTfX1nOMy5RoZVfSL9AHQpif9rn9kxpqCC9rOynDJ9mRVwe8i2udaLVyN8o7YxPeM0OHLEXLm/w2H+rKrOhnYQMQBZ3rHJTSvP9Phz7K7db8CL9zmNDl2SdRhPcbQGz1vnu04UacGwh/n0+ji+rJcIgX9+eO0OZ78CaEzNzkYhobM4G3p7osPhmX5bSdz7MHWUE0GEOP+qDtyPgsRPCW5kDkYiKYIz0sNH5f4vu0+xn4cJYrUCaGh7nKI3H6Ab1b5hpuA4XbldvRBVTJAYW68hfRPNLsNC8QMofyWM0pr74Dt8Dzm7JRY7qrWa0tL0qWYbBQcgSi64lw+hMDbFArw4wHeLQUK/Xa2eND1M2/0dz3ZyFv/K7m8ngUAA5AH8vvher6uxAhqZMktuvAeul6N5lEgSuwvOeGNPMfa3X3Yjhkz8j72fexDl1jFBlVGhsjKUiQtJvc0IXKjpQHp0LUFa9cxDA5wbnTi6EcbEEnBqSM9YJQCMOjCpu3sswYeiDeN8d0Sdc6smoH/VbqCdr8rrdtc3e0yPvfvATz2m3Cep5QQkyOgFnpIim546O/2Vy+ip7Ge31e/nf7yCLgylKgh3N/9m5A22Epzsezc99epVi92vzEACcekNqzaxrhfKCbzFd+4h93KFgBRsZxY5nhPvl3MPbUg6dC/dTA=
