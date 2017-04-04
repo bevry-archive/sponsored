@@ -131,15 +131,28 @@ class SponsorSetup {
 }
 
 class TierSetup {
+	change (e) {
+		this.value = Number(e.target.value)
+	}
 	view () {
+		const value = this.value || tiers[0].cents
+		const tier = tiers.find((tier) => tier.cents === value)
 		return m('section',
 			m('h2', 'Tier Selection'),
 			m('form',
-				m('select', { name: 'tier', required: true },
-					tiers.map((tier) => m('option', { value: tier.cents, title: tier.description }, tier.name))
+				m('select', {
+					name: 'tier',
+					required: true,
+					value,
+					onchange: this.change.bind(this)
+				},
+					tiers.map((tier) => m('option', { value: tier.cents, title: tier.description },
+						`${tier.name} ($${Math.ceil(tier.cents / 100)}/month)`
+					))
 				),
 				m(SubmitButton)
-			)
+			),
+			m('p', tier.description)
 		)
 	}
 }

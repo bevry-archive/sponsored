@@ -88,6 +88,9 @@ input {
 	background-position: left 0.75rem center;
 	padding-left: 3rem;
 }
+form {
+	margin-left: -0.5rem;
+}
 select {
 	padding-right: 3rem;
 	background-position: right 1rem center;
