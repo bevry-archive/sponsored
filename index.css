@@ -1,4 +1,4 @@
-@import '//cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css';
+@import '/vendor/normalize.min.css';
 
 * {
 	box-sizing: border-box;
@@ -80,11 +80,19 @@ input {
 	box-shadow: 0 0 3px var(--grey5);
 }
 .action.patreon  {
-	background-image: url('/images/patreon.png');
+	background-image: url('/vendor/patreon.png');
 	background-repeat: no-repeat;
 	background-size: 1.5rem 1.5rem;
 	background-position: 1rem 0.5rem;
 	padding-left: 3rem;
+}
+
+
+.hide {
+	height: 1px;
+	width: 1px;
+	opacity: 0;
+	cursor: default;
 }
 
 section {
