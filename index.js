@@ -47,8 +47,8 @@ class PatreonSetup {
 			m('h2', 'Patreon Setup'),
 			m('p', 'To fetch your patreon sponsors we need to crawl the patreon website. To do this, we need your patreon username and password.'),
 			m('form',
-				m('input', { required: true, type: 'email', placeholder: 'your@patreon.email' }),
-				m('input', { required: true, type: 'password', placeholder: 'your patreon password' }),
+				m('input', { required: true, type: 'email', placeholder: 'Your Patreon Email' }),
+				m('input', { required: true, type: 'password', placeholder: 'Your Patreon Password' }),
 				m(SubmitButton)
 			)
 		)
@@ -66,10 +66,10 @@ const object = Joi.object().keys({
 */
 
 const fields = [
-	{ name: 'name', type: 'text', placeholder: 'name', autocomplete: 'name' },
-	{ name: 'website', type: 'url', placeholder: 'website url', autocomplete: 'url' },
-	{ name: 'description', type: 'text', placeholder: 'description' },
-	{ name: 'logo', type: 'url', placeholder: 'logo url' }
+	{ name: 'name', type: 'text', placeholder: 'Name', autocomplete: 'name' },
+	{ name: 'website', type: 'url', placeholder: 'Website URL', autocomplete: 'url' },
+	{ name: 'description', type: 'text', placeholder: 'Description' },
+	{ name: 'logo', type: 'url', placeholder: 'Logo URL' }
 ]
 
 const tiers = [
@@ -117,8 +117,8 @@ class UserSetup {
 		return m('section',
 			m('h2', 'User Details'),
 			m('form',
-				m('input', { name: 'email', type: 'email', placeholder: 'email', required: true, autocomplete: 'email' }),
-				m('input', { name: 'name', type: 'text', placeholder: 'name', required: true, autocomplete: 'name' }),
+				m('input', { name: 'email', type: 'email', placeholder: 'Email', required: true, autocomplete: 'email' }),
+				m('input', { name: 'name', type: 'text', placeholder: 'Name', required: true, autocomplete: 'name' }),
 				m(SubmitButton)
 			)
 		)
