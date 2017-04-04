@@ -33,6 +33,7 @@ class SubmitButton {
 class DatabaseSetup {
 	view () {
 		return m('section',
+			m('h2', 'Database Setup'),
 			m('span.action', 'Remote Database'),
 			' or ',
 			m('span.action', 'Local Database')
@@ -43,6 +44,7 @@ class DatabaseSetup {
 class PatreonSetup {
 	view () {
 		return m('section',
+			m('h2', 'Patreon Setup'),
 			m('p', 'To fetch your patreon sponsors we need to crawl the patreon website. To do this, we need your patreon username and password.'),
 			m('form',
 				m('input', { required: true, type: 'email', placeholder: 'your@patreon.email' }),
@@ -150,7 +152,7 @@ class TierSetup {
 	view () {
 		const tier = state.tier
 		const value = (tier && tier.cents) || 0
-		let duration, preview, description
+		let duration, preview, description = 'Select a sponsor tier to have your chosen details show up in sponsor listings'
 		if (tier) {
 			duration = Math.floor(credit / tier.cents) + ' months'
 			description = tier.description // || `Makes use of the fields: ${tier.fields.join(', ')}`
@@ -167,34 +169,38 @@ class TierSetup {
 		}
 		return m('section.tier-setup',
 			m('form',
-				m('h2', 'Tier Selection'),
+				m('h2', 'Sponsor Tier'),
 				m('p', `You have ${renderCents(credit)} of credit available`),
+				(value || null) && m('p', `With your credit, your sponsor tier selection will continue ${duration}`),
 
-				m('select', {
-					name: 'tier',
-					required: true,
-					value,
-					onchange: this.changeTier.bind(this)
-				},
-					m('option', { value: 0 }, 'No Tier'),
-					tiers.map((tier) => m('option', {value: tier.cents, disabled: tier.cents > credit},
-						`${tier.name} (${renderTierAmount(tier)})`
-					))
+				m('fieldset',
+					m('select', {
+						name: 'tier',
+						required: true,
+						value,
+						onchange: this.changeTier.bind(this)
+					},
+						m('option', { value: 0 }, 'No Tier'),
+						tiers.map((tier) => m('option', {value: tier.cents, disabled: tier.cents > credit},
+							`${tier.name} (${renderTierAmount(tier)})`
+						))
+					),
+					m(SubmitButton)
 				),
-				m(SubmitButton),
 
-				((value && description) || null) && m('p', description),
-				(value || null) && m('p', `With your credit, your tier selection will continue ${duration}`),
-				(value || null) && m('h3', 'Fields'),
-				(value || null) && fields.map((attrs) => (tier.fields.indexOf(attrs.name) !== -1 || null) && m('input',
+				(description || null) && m('p', description),
+				// (value || null) && m('h3', 'Fields'),
+				(value || null) && m('p', 'Fill in these fields to display your sponsor listing:'),
+				m('fieldset', (value || null) && fields.map((attrs) => (tier.fields.indexOf(attrs.name) !== -1 || null) && m('input',
 					Object.assign({
 						required: true,
 						onkeyup: this.changeField.bind(this, attrs),
 						onchange: this.changeField.bind(this, attrs),
 						value: state.sponsor[attrs.name]
 					}, attrs)
-				)),
-				(value || null) && m('h3', 'Preview'),
+				))),
+				// (value || null) && m('h3', 'Sponsor Listing Preview'),
+				(value || null) && m('p', 'This is how your listing will look like:'),
 				(value || null) && m('.preview', preview)
 			)
 		)
