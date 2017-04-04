@@ -64,7 +64,7 @@ const object = Joi.object().keys({
 */
 
 const fields = [
-	{ name: 'name', type: 'text', placeholder: 'name', required: true, autocomplete: 'name' },
+	{ name: 'name', type: 'text', placeholder: 'name', autocomplete: 'name' },
 	{ name: 'website', type: 'url', placeholder: 'website url', autocomplete: 'url' },
 	{ name: 'description', type: 'text', placeholder: 'description' },
 	{ name: 'logo', type: 'url', placeholder: 'logo url' }
@@ -72,7 +72,7 @@ const fields = [
 
 const tiers = [
 	{ cents: 500, name: 'Individual', fields: ['name'] },
-	{ cents: 3000, name: 'Freelancer', fields: ['name, website'] },
+	{ cents: 3000, name: 'Freelancer', fields: ['name', 'website'] },
 	{ cents: 75000, name: 'Business', fields: ['name', 'website', 'description'] },
 	{ cents: 150000, name: 'Corporate', fields: ['name', 'website', 'description', 'logo']}
 ]
@@ -80,11 +80,6 @@ const tiers = [
 function renderSponsorTier (m, sponsor, tier) {
 	const { logo, description, website, name } = sponsor
 	const title = description ? `${name}: ${description}` : name
-
-	if (tier.cents >= 150000 && !logo) return new Error('logo is missing')
-	if (tier.cents >= 75000 && !description) return new Error('description is missing')
-	if (tier.cents >= 3000 && !website) return new Error('website is missing')
-	if (tier.cents >= 500 && !name) return new Error('name is missing')
 
 	if (tier.cents >= 150000) {
 		return m('a', { href: website, target: '_blank', title },
@@ -128,28 +123,6 @@ class UserSetup {
 	}
 }
 
-class SponsorSetup {
-	change (attrs, e) {
-		state.sponsor[attrs.name] = e.target.value
-	}
-
-	view () {
-		return m('section',
-			m('h2', 'Sponsor Details'),
-			m('form',
-				fields.map((attrs) => m('input',
-					Object.assign({
-						onkeyup: this.change.bind(this, attrs),
-						onchange: this.change.bind(this, attrs),
-						value: state.sponsor[attrs.name]
-					}, attrs)
-				)),
-				m(SubmitButton)
-			)
-		)
-	}
-}
-
 const credit = tiers.slice(-1)[0].cents
 
 function renderCents (cents, decimal = true) {
@@ -165,11 +138,15 @@ function renderTierAmount (tier) {
 }
 
 class TierSetup {
-	change (e) {
+	changeTier (e) {
 		const cents = Number(e.target.value)
 		const tier = tiers.find((tier) => tier.cents === cents)
 		state.tier = tier
 	}
+	changeField (attrs, e) {
+		state.sponsor[attrs.name] = e.target.value
+	}
+
 	view () {
 		const tier = state.tier
 		const value = (tier && tier.cents) || 0
@@ -177,31 +154,49 @@ class TierSetup {
 		if (tier) {
 			duration = Math.floor(credit / tier.cents) + ' months'
 			description = tier.description // || `Makes use of the fields: ${tier.fields.join(', ')}`
-			preview = renderSponsorTier(m, state.sponsor, tier)
-			if (preview == null) preview = 'The renderer returned no result'
-			else if (preview instanceof Error) preview = preview.message
+			const missing = []
+			tier.fields.forEach(function (field) {
+				if ( !state.sponsor[field] )  missing.push(field)
+			})
+			if (missing.length) {
+				preview = `Missing the fields: ${missing.join(', ')}`
+			}
+			else {
+				preview = renderSponsorTier(m, state.sponsor, tier) || 'the renderer returned no result'
+			}
 		}
-		return m('section',
-			m('h2', 'Tier Selection'),
-			m('p', `You have ${renderCents(credit)} available`),
+		return m('section.tier-setup',
 			m('form',
+				m('h2', 'Tier Selection'),
+				m('p', `You have ${renderCents(credit)} of credit available`),
+
 				m('select', {
 					name: 'tier',
 					required: true,
 					value,
-					onchange: this.change.bind(this)
+					onchange: this.changeTier.bind(this)
 				},
 					m('option', { value: 0 }, 'No Tier'),
 					tiers.map((tier) => m('option', {value: tier.cents, disabled: tier.cents > credit},
 						`${tier.name} (${renderTierAmount(tier)})`
 					))
 				),
-				m(SubmitButton)
-			),
-			((value && description) || null) && m('p', description),
-			(value || null) && m('p', `With your credit, your tier selection will continue ${duration}`),
-			(value || null) && m('h2', 'Tier Preview'),
-			(value || null) && m('.preview', preview)
+				m(SubmitButton),
+
+				((value && description) || null) && m('p', description),
+				(value || null) && m('p', `With your credit, your tier selection will continue ${duration}`),
+				(value || null) && m('h3', 'Fields'),
+				(value || null) && fields.map((attrs) => (tier.fields.indexOf(attrs.name) !== -1 || null) && m('input',
+					Object.assign({
+						required: true,
+						onkeyup: this.changeField.bind(this, attrs),
+						onchange: this.changeField.bind(this, attrs),
+						value: state.sponsor[attrs.name]
+					}, attrs)
+				)),
+				(value || null) && m('h3', 'Preview'),
+				(value || null) && m('.preview', preview)
+			)
 		)
 	}
 }
@@ -217,7 +212,6 @@ class App {
 				m(PatreonSetup),
 				m(PatreonButton),
 				m(UserSetup),
-				m(SponsorSetup),
 				m(TierSetup)
 			)
 		)
