@@ -4,6 +4,10 @@
 
 const m = window.m
 
+const state = {
+	sponsor: {}
+}
+
 class PatreonButton {
 	view () {
 		return m('span.action.patreon', 'Login with Patreon →')
@@ -61,40 +65,42 @@ const object = Joi.object().keys({
 
 const fields = [
 	{ name: 'name', type: 'text', placeholder: 'name', required: true, autocomplete: 'name' },
-	{ name: 'description', type: 'text', placeholder: 'description' },
 	{ name: 'website', type: 'url', placeholder: 'website url', autocomplete: 'url' },
+	{ name: 'description', type: 'text', placeholder: 'description' },
 	{ name: 'logo', type: 'url', placeholder: 'logo url' }
 ]
 
 const tiers = [
-	{ cents: 500, name: 'Individual', description: 'Your sponsor listing includes a name' },
-	{ cents: 3000, name: 'Freelancer', description: 'Your sponsor listing includes a name and website' },
-	{ cents: 75000, name: 'Business', description: 'Your sponsor listing includes a name, website, and description' },
-	{ cents: 150000, name: 'Corporate', description: 'Your sponsor listing includes a name, website, description, and logo'}
-]
+	{ cents: 0, name: 'No Tier', description: 'You will not have a sponsored listing'}
+].concat([
+	{ cents: 500, name: 'Individual', description: 'Will display the name field' },
+	{ cents: 3000, name: 'Freelancer', description: 'Will display the name and website fields' },
+	{ cents: 75000, name: 'Business', description: 'Will display the name, website, and description fields' },
+	{ cents: 150000, name: 'Corporate', description: 'Will display the name, website, description, and logo fields'}
+])
 
-function renderUserTier (m, user, tier) {
+function renderSponsorTier (m, sponsor, tier) {
 	// $1500+
-	const logo = user.logo && tier.cents > 150000
+	const logo = tier.cents >= 150000 && sponsor.logo
 	// $750+
-	const description = user.slogan && tier.cents > 75000
+	const description = tier.cents >= 75000 && sponsor.description
 	// $30+
-	const website = user.website && tier.cents > 3000
+	const website = tier.cents >= 3000 && sponsor.website
 	// $5+
-	const name = user.name && tier.cents > 500
+	const name = tier.cents >= 500 && sponsor.name
 	if (!name) return null
 
 	// Render
 	const title = description ? `${name}: ${description}` : name
-	if (logo) {
-		return website
+	const result =
+		logo
+		? (website
 			? m('a', { href: website, target: '_blank', title },
 				m('img', { src: logo, alt: title })
 			)
 			: m('img', { src: logo, alt: title })
-	}
-	else {
-		return website
+		)
+		:	(website
 			? m('span',
 				m('a', { href: website, target: '_blank', title },
 					name
@@ -102,7 +108,10 @@ function renderUserTier (m, user, tier) {
 				description ? `: ${description}` : null
 			)
 			: m('span', title)
-	}
+			)
+	console.log(result)
+	return result
+
 }
 
 class UserSetup {
@@ -119,15 +128,45 @@ class UserSetup {
 }
 
 class SponsorSetup {
+	change (attrs, e) {
+		state.sponsor[attrs.name] = e.target.value
+		console.log(state.sponsor)
+	}
+
 	view () {
 		return m('section',
 			m('h2', 'Sponsor Details'),
 			m('form',
-				fields.map((attrs) => m('input', attrs)),
+				fields.map((attrs) => m('input',
+					Object.assign({
+						onkeyup: this.change.bind(this, attrs),
+						onchange: this.change.bind(this, attrs),
+						value: state.sponsor[attrs.name]
+					}, attrs)
+				)),
 				m(SubmitButton)
 			)
 		)
 	}
+}
+
+class EmptySponsorTier {
+	view () {
+		return m('span', 'You have not filled out enough Sponsor Details for this tier to display')
+	}
+}
+const credit = tiers.slice(-1)[0].cents
+
+function renderCents (cents, decimal = true) {
+	return '$' + (
+		decimal
+		? (cents / 100).toFixed(2)
+		: Math.ceil(cents / 100)
+	)
+}
+
+function renderTierAmount (tier) {
+	return renderCents(tier.cents, false) + '/month'
 }
 
 class TierSetup {
@@ -135,10 +174,17 @@ class TierSetup {
 		this.value = Number(e.target.value)
 	}
 	view () {
-		const value = this.value || tiers[0].cents
+		const value = this.value == null ? tiers[0].cents : this.value
 		const tier = tiers.find((tier) => tier.cents === value)
+		let duration = value
+			? Math.floor(credit / value) + ' months'
+			: 'indefinitely'
+		if ( duration === '1 months') {
+			duration = '1 month'
+		}
 		return m('section',
 			m('h2', 'Tier Selection'),
+			m('p', `You have ${renderCents(credit)} available`),
 			m('form',
 				m('select', {
 					name: 'tier',
@@ -146,13 +192,24 @@ class TierSetup {
 					value,
 					onchange: this.change.bind(this)
 				},
-					tiers.map((tier) => m('option', { value: tier.cents, title: tier.description },
-						`${tier.name} ($${Math.ceil(tier.cents / 100)}/month)`
+					tiers.map((tier) => m('option', {
+						value: tier.cents,
+						title: tier.description,
+						disabled: tier.cents > credit
+					},
+						`${tier.name} (${renderTierAmount(tier)})`
 					))
 				),
 				m(SubmitButton)
 			),
-			m('p', tier.description)
+			m('p', tier.description),
+			value ? [
+				m('p', `With your credit, your tier selection will continue ${duration}`),
+				m('p', 'It will look like this:'),
+				m('.preview',
+					renderSponsorTier(m, state.sponsor, tier) || m(EmptySponsorTier)
+				)
+			] : ''
 		)
 	}
 }

@@ -31,13 +31,15 @@ article {
 	margin: 5% 15%;
 }
 
-/*
-section {
+div.preview {
 	background: var(--white);
 	border: 1px solid var(--grey3);
-	padding: 0 1em;
+	padding: 1em;
 }
-*/
+div.preview img {
+	max-width: 10em;
+	max-height: 10em;
+}
 
 .steps li:not(.active) {
 	color: #CCC;
@@ -47,7 +49,7 @@ section {
 }
 
 
-h1, h2, body, select {
+h1, h2, body, input, select {
 	font-weight: 300;
 }
 
