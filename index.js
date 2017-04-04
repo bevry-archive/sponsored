@@ -5,7 +5,8 @@
 const m = window.m
 
 const state = {
-	sponsor: {}
+	'sponsor': {},
+	'2fa': false
 }
 
 class PatreonButton {
@@ -50,20 +51,14 @@ class PatreonSetup {
 				m('input', { required: true, type: 'email', placeholder: 'Your Patreon Email' }),
 				m('input', { required: true, type: 'password', placeholder: 'Your Patreon Password' }),
 				m(SubmitButton)
+			),
+			(state['2fa'] || null) && m('form',
+				m('input', { required: true, type: 'number', placeholder: 'Your Patreon 2FA Code' }),
+				m(SubmitButton)
 			)
 		)
 	}
 }
-
-/*
-const object = Joi.object().keys({
-	email: Joi.email().required(),
-	name: Joi.string().required(),
-	description: Joi.string().label('tagline'),
-	website: Joi.string().uri().label('website url'),
-	logo: Joi.string().uri().label('logo url')
-})
-*/
 
 const fields = [
 	{ name: 'name', type: 'text', placeholder: 'Name', autocomplete: 'name' },

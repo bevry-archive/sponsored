@@ -101,7 +101,7 @@ input:focus {
 	background-position: left 0.75rem center;
 	padding-left: 3rem;
 }
-fieldset {
+form, fieldset {
 	border: none;
 	padding: 0;
 	margin: 0;
@@ -152,6 +152,13 @@ form:invalid .submit {
 
 section {
 	margin: 3em 0;
+}
+
+/* disable number steppers */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 /*
