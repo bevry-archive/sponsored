@@ -71,47 +71,48 @@ const fields = [
 ]
 
 const tiers = [
-	{ cents: 0, name: 'No Tier', description: 'You will not have a sponsored listing'}
-].concat([
-	{ cents: 500, name: 'Individual', description: 'Will display the name field' },
-	{ cents: 3000, name: 'Freelancer', description: 'Will display the name and website fields' },
-	{ cents: 75000, name: 'Business', description: 'Will display the name, website, and description fields' },
-	{ cents: 150000, name: 'Corporate', description: 'Will display the name, website, description, and logo fields'}
-])
+	{ cents: 500, name: 'Individual', fields: ['name'] },
+	{ cents: 3000, name: 'Freelancer', fields: ['name, website'] },
+	{ cents: 75000, name: 'Business', fields: ['name', 'website', 'description'] },
+	{ cents: 150000, name: 'Corporate', fields: ['name', 'website', 'description', 'logo']}
+]
 
 function renderSponsorTier (m, sponsor, tier) {
-	// $1500+
-	const logo = tier.cents >= 150000 && sponsor.logo
-	// $750+
-	const description = tier.cents >= 75000 && sponsor.description
-	// $30+
-	const website = tier.cents >= 3000 && sponsor.website
-	// $5+
-	const name = tier.cents >= 500 && sponsor.name
-	if (!name) return null
-
-	// Render
+	const { logo, description, website, name } = sponsor
 	const title = description ? `${name}: ${description}` : name
-	const result =
-		logo
-		? (website
-			? m('a', { href: website, target: '_blank', title },
-				m('img', { src: logo, alt: title })
-			)
-			: m('img', { src: logo, alt: title })
-		)
-		:	(website
-			? m('span',
-				m('a', { href: website, target: '_blank', title },
-					name
-				),
-				description ? `: ${description}` : null
-			)
-			: m('span', title)
-			)
-	console.log(result)
-	return result
 
+	if (tier.cents >= 150000 && !logo) return new Error('logo is missing')
+	if (tier.cents >= 75000 && !description) return new Error('description is missing')
+	if (tier.cents >= 3000 && !website) return new Error('website is missing')
+	if (tier.cents >= 500 && !name) return new Error('name is missing')
+
+	if (tier.cents >= 150000) {
+		return m('a', { href: website, target: '_blank', title },
+			m('img', { src: logo, alt: title })
+		)
+	}
+	else if (tier.cents >= 75000) {
+		return m('span',
+			m('a', { href: website, target: '_blank', title },
+				name
+			),
+			`: ${description}`
+		)
+	}
+	else if (tier.cents >= 3000) {
+		return m('span',
+			m('a', { href: website, target: '_blank', title },
+				name
+			)
+		)
+	}
+	else if (tier.cents >= 500) {
+		return m('span',
+			m('a', { href: website, target: '_blank', title },
+				name
+			)
+		)
+	}
 }
 
 class UserSetup {
@@ -130,7 +131,6 @@ class UserSetup {
 class SponsorSetup {
 	change (attrs, e) {
 		state.sponsor[attrs.name] = e.target.value
-		console.log(state.sponsor)
 	}
 
 	view () {
@@ -150,11 +150,6 @@ class SponsorSetup {
 	}
 }
 
-class EmptySponsorTier {
-	view () {
-		return m('span', 'You have not filled out enough Sponsor Details for this tier to display')
-	}
-}
 const credit = tiers.slice(-1)[0].cents
 
 function renderCents (cents, decimal = true) {
@@ -171,16 +166,20 @@ function renderTierAmount (tier) {
 
 class TierSetup {
 	change (e) {
-		this.value = Number(e.target.value)
+		const cents = Number(e.target.value)
+		const tier = tiers.find((tier) => tier.cents === cents)
+		state.tier = tier
 	}
 	view () {
-		const value = this.value == null ? tiers[0].cents : this.value
-		const tier = tiers.find((tier) => tier.cents === value)
-		let duration = value
-			? Math.floor(credit / value) + ' months'
-			: 'indefinitely'
-		if ( duration === '1 months') {
-			duration = '1 month'
+		const tier = state.tier
+		const value = (tier && tier.cents) || 0
+		let duration, preview, description
+		if (tier) {
+			duration = Math.floor(credit / tier.cents) + ' months'
+			description = tier.description // || `Makes use of the fields: ${tier.fields.join(', ')}`
+			preview = renderSponsorTier(m, state.sponsor, tier)
+			if (preview == null) preview = 'The renderer returned no result'
+			else if (preview instanceof Error) preview = preview.message
 		}
 		return m('section',
 			m('h2', 'Tier Selection'),
@@ -192,24 +191,17 @@ class TierSetup {
 					value,
 					onchange: this.change.bind(this)
 				},
-					tiers.map((tier) => m('option', {
-						value: tier.cents,
-						title: tier.description,
-						disabled: tier.cents > credit
-					},
+					m('option', { value: 0 }, 'No Tier'),
+					tiers.map((tier) => m('option', {value: tier.cents, disabled: tier.cents > credit},
 						`${tier.name} (${renderTierAmount(tier)})`
 					))
 				),
 				m(SubmitButton)
 			),
-			m('p', tier.description),
-			value ? [
-				m('p', `With your credit, your tier selection will continue ${duration}`),
-				m('p', 'It will look like this:'),
-				m('.preview',
-					renderSponsorTier(m, state.sponsor, tier) || m(EmptySponsorTier)
-				)
-			] : ''
+			((value && description) || null) && m('p', description),
+			(value || null) && m('p', `With your credit, your tier selection will continue ${duration}`),
+			(value || null) && m('h2', 'Tier Preview'),
+			(value || null) && m('.preview', preview)
 		)
 	}
 }
