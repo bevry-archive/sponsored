@@ -54,7 +54,6 @@ h1, h2, body {
 input {
 	display: inline-block;
 	border: none;
-	cursor: text !important;
 }
 .action, input {
 	font-size: 1rem;
@@ -65,8 +64,10 @@ input {
 	border-bottom: 1px solid var(--grey4);
 	border-right: 1px solid var(--grey4);
 	margin: 0 0.5rem;
-	cursor: pointer;
 	transition: 0.1s box-shadow;
+}
+.action {
+	cursor: pointer;
 }
 .action:hover {
 	text-decoration: underline;

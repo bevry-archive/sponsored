@@ -14,14 +14,15 @@ class DatabaseSetup {
 	}
 }
 
-
 class PatreonSetup {
 	view () {
 		return m('section',
 			m('p', 'To fetch your patreon sponsors we need to crawl the patreon website. To do this, we need your patreon username and password.'),
-			m('input', { type: 'email', placeholder: 'your@patreon.email' }),
-			m('input', { type: 'password', placeholder: 'your patreon password' }),
-			m('span.action', 'Proceed →')
+			m('form',
+				m('input', { required: true, type: 'email', placeholder: 'your@patreon.email' }),
+				m('input', { required: true, type: 'password', placeholder: 'your patreon password' }),
+				m('input.action', { type: 'submit', value: 'Proceed →' })
+			)
 		)
 	}
 }
@@ -31,6 +32,25 @@ class PatreonButton {
 		return m('span.action.patreon', 'Login with Patreon →')
 	}
 }
+
+
+class AccountSetup {
+	view () {
+		return m('section',
+			m('form',
+				m('h2', 'Sponsor Details'),
+				m('input', { required: true, name: 'email', type: 'email', placeholder: 'email', autocomplete: 'email' }),
+				m('input', { required: true, name: 'name', type: 'text', placeholder: 'name', autocomplete: 'name' }),
+				m('input', { name: 'description', type: 'text', placeholder: 'tagline' }),
+				m('input', { name: 'website', type: 'url', placeholder: 'website url', autocomplete: 'url' }),
+				m('input', { name: 'logo', type: 'url', placeholder: 'logo url' }),
+				m('input.action', { type: 'submit', value: 'Proceed →' })
+			)
+		)
+	}
+}
+
+
 class App {
 	view () {
 		return m('article',
@@ -40,7 +60,8 @@ class App {
 			m('section.mainbar',
 				m(DatabaseSetup),
 				m(PatreonSetup),
-				m(PatreonButton)
+				m(PatreonButton),
+				m(AccountSetup)
 			)
 		)
 	}
