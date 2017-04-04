@@ -211,12 +211,12 @@ class App {
 	view () {
 		return m('article',
 			m('section.sidebar',
-				m('h1', 'Welcome to Sponsored'),
+				m('h1', 'Welcome to Sponsored')
 			),
 			m('section.mainbar',
+				m(PatreonButton),
 				m(DatabaseSetup),
 				m(PatreonSetup),
-				m(PatreonButton),
 				m(UserSetup),
 				m(TierSetup)
 			)

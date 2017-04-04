@@ -10,6 +10,8 @@
 	--grey3: #EEE;
 	--grey4: #d1d1d1;
 	--grey5: #c1c1c1;
+	--grey6: #bbb;
+	--grey7: #aaa;
 	--black1: #1e1e1e;
 	--white: white;
 }
@@ -71,6 +73,11 @@ input {
 	margin: 0 0.5rem;
 	transition: 0.1s box-shadow;
 }
+input {
+	border: 1px solid transparent;
+	border-top: 1px solid var(--grey4);
+	border-left: 1px solid var(--grey4);
+}
 input:focus {
 	outline: none;
 }
@@ -98,7 +105,11 @@ fieldset {
 	border: none;
 	padding: 0;
 	margin: 0;
-	margin-left: -0.5rem;
+	margin-bottom: 1.75rem;
+}
+fieldset input {
+	width: 45%;
+	margin-bottom: 0.75rem;
 }
 
 select,
@@ -132,10 +143,11 @@ form:invalid .submit {
 }
 
 .hide {
-	height: 1px;
-	width: 1px;
-	opacity: 0;
-	cursor: default;
+	all: initial !important;
+	visibility: hidden !important;
+	display: inline-block !important;
+	height: 1px !important;
+	width: 1px !important;
 }
 
 section {
