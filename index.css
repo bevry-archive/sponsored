@@ -87,46 +87,6 @@ input {
 	padding-left: 3rem;
 }
 
-.action.submit {
-	overflow: hidden;
-	position: relative;
-	width: 200px;
-	height: 1.5rem;
-}
-.action.submit span {
-	transition: 1s all;
-	position: absolute;
-	background: white;
-	animation: slideaway 1s;
-	top: -2em;
-	left: 0;
-}
-.action.submit.normal .normal {
-	animation: slideup 1s;
-	top: 0;
-}
-.action.submit.sending .sending {
-	animation: slideup 1s;
-	top: 0;
-}
-.action.submit.success .success {
-	animation: slideup 1s;
-	top: 0;
-}
-.action.submit.error .error {
-	animation: slideup 1s;
-	top: 0;
-}
-@keyframes slideaway {
-	from { top: 0; }
-	to   { top: -2em; }
-}
-@keyframes slideup {
-	from { top: 2em; }
-	to   { top: 0; }
-}
-
-
 
 .hide {
 	height: 1px;
