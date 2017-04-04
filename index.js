@@ -15,11 +15,17 @@ class SubmitButton {
 		const el = e.target
 		const submit =	el.parentNode.lastElementChild
 		submit.click()
+		const classes = ['normal', 'sending', 'success', 'error']
+		const i = classes.indexOf(this.class || 'normal')
+		this.class = (i === 3)  ? classes[0] : classes[i + 1]
 	}
 	view () {
 		return m('span',
-			m('.action.submit', { onclick: this.submit.bind(this) },
-				'Proceed →'
+			m(`.action.submit.${this.class || 'normal'}`, { onclick: this.submit.bind(this) },
+				m('span.normal', 'Proceed →'),
+				m('span.sending', 'Sending'),
+				m('span.success', 'Success'),
+				m('span.error', 'Error')
 			),
 			m('input.hide', { type: 'submit' })
 		)
