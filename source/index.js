@@ -2,11 +2,15 @@
 'use strict'
 
 const extendr = require('extendr')
+const pathUtil = require('path')
 const {log} = require('./util')
 
 module.exports = function (config = {}) {
 	const app = {
 		config: extendr.deep({
+			pouchdb: {
+				uri: pathUtil.join(process.cwd(), './database')
+			},
 			firebase: {
 				// firebase both config
 				databaseURL: process.env.FIREBASE_DATABASE_URL,
@@ -39,7 +43,7 @@ module.exports = function (config = {}) {
 	}
 
 	return Promise.resolve(app)
-		.then(require('./app/firebase-setup'))
+		.then(require('./app/pouchdb-setup'))
 		.then(require('./app/patreon-setup'))
 		.then(require('./app/patreon-data'))
 		.then(require('./app/opencollective-data'))

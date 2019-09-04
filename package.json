@@ -84,11 +84,10 @@
     "eachr": "^3.2.0",
     "editions": "^1.3.3",
     "extendr": "^3.2.2",
-    "firebase": "^3.7.4",
-    "firebase-admin": "^4.1.4",
     "nightmare": "^2.10.0",
     "node-fetch": "^1.6.3",
-    "patreon": "0.1.0"
+    "patreon": "0.1.0",
+    "pouchdb-node": "^6.1.2"
   },
   "devDependencies": {
     "assert-helpers": "^4.5.0",
