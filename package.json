@@ -64,19 +64,9 @@
       "syntaxes": [
         "javascript",
         "esnext",
-        "require",
+        "import",
         "const",
         "let"
-      ]
-    },
-    {
-      "description": "Babel Compiled + ES2015 + Require",
-      "directory": "es2015",
-      "entry": "index.js",
-      "syntaxes": [
-        "javascript",
-        "es2015",
-        "require"
       ]
     }
   ],
@@ -86,13 +76,12 @@
     "our:setup": "npm install",
     "our:clean": "rm -Rf ./docs ./es2015 ./out",
     "our:compile": "npm run our:compile:es2015",
-    "our:compile:es2015": "babel ./source --out-dir ./es2015 --presets es2015",
+    "our:compile:es2015": "echo 'no compile'",
     "our:meta": "npm run our:meta:docs && npm run our:meta:projectz",
     "our:meta:docs": "documentation build -f html -o ./docs -g --shallow ./source/**.js",
     "our:meta:projectz": "projectz compile",
-    "our:verify": "npm run our:verify:eslint && npm run our:verify:flow",
+    "our:verify": "npm run our:verify:eslint",
     "our:verify:eslint": "eslint --fix ./source",
-    "our:verify:flow": "flow check",
     "our:test": "npm run our:verify && npm test",
     "our:release": "npm run our:release:prepare && npm run our:release:check && npm run our:release:tag && npm run our:release:push",
     "our:release:prepare": "npm run our:clean && npm run our:compile && npm run our:test && npm run our:meta",
@@ -105,6 +94,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "eslint": "^3.19.0"
+    "eslint": "^3.19.0",
+    "rollup": "^0.41.6"
   }
 }
